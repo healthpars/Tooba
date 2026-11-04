@@ -1,0 +1,80 @@
+<UserControl x:Class="TobiFund.WPF.Views.UsersView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:h="clr-namespace:TobiFund.WPF.Helpers"
+             FlowDirection="RightToLeft"
+             FontFamily="Tahoma"
+             Loaded="UserControl_Loaded">
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="کاربران سیستم (فقط مدیر)" Style="{StaticResource PageTitle}" />
+
+        <Border Grid.Row="1" Style="{StaticResource CardStyle}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0" Orientation="Horizontal">
+                    <Button Content="بازخوانی" Command="{Binding LoadCommand}" />
+                    <Button Content="فعال/غیرفعال کردن کاربر انتخاب‌شده" Style="{StaticResource DangerButtonStyle}"
+                            Command="{Binding ToggleActiveCommand}" />
+                </StackPanel>
+                <DataGrid Grid.Row="1"
+                          ItemsSource="{Binding Users}"
+                          SelectedItem="{Binding SelectedUser}"
+                          Style="{StaticResource DataGridStyle}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="نام کاربری" Binding="{Binding Username}" Width="*" />
+                        <DataGridTextColumn Header="نام کامل" Binding="{Binding FullName}" Width="*" />
+                        <DataGridTextColumn Header="نقش" Binding="{Binding RoleName}" Width="Auto" />
+                        <DataGridCheckBoxColumn Header="فعال" Binding="{Binding IsActive}" Width="Auto" />
+                        <DataGridTextColumn Header="تاریخ ایجاد" Binding="{Binding CreatedAt, Converter={StaticResource PersianDate}, ConverterParameter=datetime}" Width="Auto" />
+                        <DataGridTextColumn Header="آخرین ورود" Binding="{Binding LastLoginAt, Converter={StaticResource PersianDate}, ConverterParameter=datetime}" Width="Auto" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="2" Style="{StaticResource CardStyle}">
+            <StackPanel>
+                <TextBlock Text="ایجاد کاربر جدید" Style="{StaticResource SectionTitle}" />
+                <WrapPanel>
+                    <StackPanel Margin="8,0">
+                        <TextBlock Text="نام کاربری" Style="{StaticResource FieldLabel}" />
+                        <TextBox Width="160" Style="{StaticResource TextBoxStyle}" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="8,0">
+                        <TextBlock Text="نام کامل" Style="{StaticResource FieldLabel}" />
+                        <TextBox Width="180" Style="{StaticResource TextBoxStyle}" Text="{Binding FullName, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="8,0">
+                        <TextBlock Text="رمز عبور" Style="{StaticResource FieldLabel}" />
+                        <PasswordBox Width="160" Style="{StaticResource PasswordBoxStyle}"
+                                     h:PasswordBoxAssistant.BoundPassword="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="8,0">
+                        <TextBlock Text="نقش" Style="{StaticResource FieldLabel}" />
+                        <ComboBox Width="130" Style="{StaticResource ComboBoxStyle}" SelectedIndex="{Binding RoleIndex}">
+                            <ComboBoxItem>مدیر</ComboBoxItem>
+                            <ComboBoxItem>اپراتور</ComboBoxItem>
+                        </ComboBox>
+                    </StackPanel>
+                    <Button Content="ایجاد کاربر" Style="{StaticResource PrimaryButtonStyle}"
+                            Command="{Binding CreateCommand}" Margin="8,20,8,0" />
+                </WrapPanel>
+                <TextBlock Text="{Binding Message}" TextWrapping="Wrap" Margin="0,6,0,0"
+                           Foreground="{StaticResource DangerBrush}"
+                           Visibility="{Binding IsError, Converter={StaticResource BoolToVisibility}}" />
+                <TextBlock Text="{Binding Message}" TextWrapping="Wrap" Margin="0,6,0,0"
+                           Foreground="#2E7D32"
+                           Visibility="{Binding IsError, Converter={StaticResource InverseBoolToVisibility}}" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

@@ -1,0 +1,82 @@
+<UserControl x:Class="TobiFund.WPF.Views.SubscriptionsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:TobiFund.WPF.Controls"
+             FlowDirection="RightToLeft"
+             FontFamily="Tahoma"
+             Loaded="UserControl_Loaded">
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="آبونمان — وضعیت و پرداخت آبونمان ماهانه" Style="{StaticResource PageTitle}" />
+
+        <!-- فیلتر -->
+        <Border Grid.Row="1" Style="{StaticResource CardStyle}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="عضو:" VerticalAlignment="Center" Margin="6,0" />
+                <ComboBox Width="220" Style="{StaticResource ComboBoxStyle}"
+                          ItemsSource="{Binding Members}"
+                          DisplayMemberPath="FullName"
+                          SelectedItem="{Binding SelectedMember}" />
+                <Button Content="نمایش آبونمان‌های عضو" Command="{Binding FilterCommand}" />
+                <Button Content="نمایش همه" Command="{Binding LoadCommand}" />
+                <TextBlock Text="سال شمسی:" VerticalAlignment="Center" Margin="16,0,0,0" />
+                <TextBox Width="90" Style="{StaticResource TextBoxStyle}" Text="{Binding YearText, UpdateSourceTrigger=PropertyChanged}" />
+                <Button Content="ایجاد ۱۲ آبونمان برای سال" Style="{StaticResource PrimaryButtonStyle}"
+                        Command="{Binding GenerateCommand}" />
+            </StackPanel>
+        </Border>
+
+        <!-- جدول آبونمان -->
+        <Border Grid.Row="2" Style="{StaticResource CardStyle}">
+            <DataGrid ItemsSource="{Binding Subscriptions}"
+                      SelectedItem="{Binding SelectedSubscription}"
+                      Style="{StaticResource DataGridStyle}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="شناسه عضو" Binding="{Binding MemberCode}" Width="Auto" />
+                    <DataGridTextColumn Header="نام عضو" Binding="{Binding MemberName}" Width="*" />
+                    <DataGridTextColumn Header="سال/ماه" Binding="{Binding YearMonth}" Width="Auto" />
+                    <DataGridTextColumn Header="ماه" Binding="{Binding MonthName}" Width="Auto" />
+                    <DataGridTextColumn Header="سررسید" Binding="{Binding DueDatePersian}" Width="Auto" />
+                    <DataGridTextColumn Header="مبلغ" Binding="{Binding Amount, Converter={StaticResource PersianNumber}}" Width="*" />
+                    <DataGridTextColumn Header="پرداخت‌شده" Binding="{Binding PaidAmount, Converter={StaticResource PersianNumber}}" Width="*" />
+                    <DataGridTextColumn Header="مانده" Binding="{Binding RemainingAmount, Converter={StaticResource PersianNumber}}" Width="*" />
+                    <DataGridTextColumn Header="وضعیت" Binding="{Binding StatusName}" Width="Auto" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+
+        <!-- پرداخت -->
+        <Border Grid.Row="3" Style="{StaticResource CardStyle}">
+            <StackPanel>
+                <WrapPanel>
+                    <StackPanel Margin="8,0">
+                        <TextBlock Text="مبلغ پرداختی" Style="{StaticResource FieldLabel}" />
+                        <TextBox Width="150" Style="{StaticResource TextBoxStyle}" Text="{Binding PayAmountText, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Margin="8,0">
+                        <TextBlock Text="تاریخ پرداخت (شمسی)" Style="{StaticResource FieldLabel}" />
+                        <controls:PersianDatePicker Width="150" Margin="0,4,0,8" SelectedDate="{Binding PayDate}" />
+                    </StackPanel>
+                    <StackPanel Margin="8,0">
+                        <TextBlock Text="توضیحات" Style="{StaticResource FieldLabel}" />
+                        <TextBox Width="220" Style="{StaticResource TextBoxStyle}" Text="{Binding PayDescription, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <Button Content="پرداخت آبونمان انتخاب‌شده" Style="{StaticResource PrimaryButtonStyle}"
+                            Command="{Binding PayCommand}" Margin="8,20,8,0" />
+                </WrapPanel>
+                <TextBlock Text="{Binding Message}" TextWrapping="Wrap" Margin="0,6,0,0"
+                           Foreground="{StaticResource DangerBrush}"
+                           Visibility="{Binding IsError, Converter={StaticResource BoolToVisibility}}" />
+                <TextBlock Text="{Binding Message}" TextWrapping="Wrap" Margin="0,6,0,0"
+                           Foreground="#2E7D32"
+                           Visibility="{Binding IsError, Converter={StaticResource InverseBoolToVisibility}}" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

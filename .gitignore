@@ -1,0 +1,29 @@
+﻿# Local .NET SDK and tooling
+/.templateengine/
+/dotnet-sdk/
+/nuget-packages/
+
+# Build outputs
+**/bin/
+**/obj/
+**/publish/
+**/publish-fdd/
+/TobiFund/installer-output/
+
+# Visual Studio and IDE
+.vs/
+.idea/
+.vscode/
+*.user
+*.suo
+
+# Test results
+**/TestResults/
+**/coverage/
+
+# Logs and temporary files
+*.log
+*.tmp
+*.cache
+Thumbs.db
+.DS_Store

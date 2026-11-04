@@ -1,0 +1,60 @@
+<UserControl x:Class="TobiFund.WPF.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             FlowDirection="RightToLeft"
+             FontFamily="Tahoma"
+             Loaded="UserControl_Loaded">
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="تنظیمات سیستم (فقط مدیر)" Style="{StaticResource PageTitle}" />
+
+        <Border Grid.Row="1" Style="{StaticResource CardStyle}">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding Settings}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderBrush="#E0E0E0" BorderThickness="0,0,0,1" Padding="8,6">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="280" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="160" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock Text="{Binding Key}" FontWeight="Bold" />
+                                        <TextBlock Text="{Binding Description}" Foreground="{StaticResource MutedBrush}"
+                                                   FontSize="11" TextWrapping="Wrap" />
+                                    </StackPanel>
+                                    <TextBlock Grid.Column="1" />
+                                    <TextBox Grid.Column="2"
+                                             Style="{StaticResource TextBoxStyle}"
+                                             Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Border>
+
+        <Border Grid.Row="2" Style="{StaticResource CardStyle}">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="ذخیره تنظیمات" Style="{StaticResource PrimaryButtonStyle}" Command="{Binding SaveCommand}" />
+                    <Button Content="بازخوانی" Command="{Binding LoadCommand}" />
+                </StackPanel>
+                <TextBlock Text="{Binding Message}" TextWrapping="Wrap" Margin="0,6,0,0"
+                           Foreground="{StaticResource DangerBrush}"
+                           Visibility="{Binding IsError, Converter={StaticResource BoolToVisibility}}" />
+                <TextBlock Text="{Binding Message}" TextWrapping="Wrap" Margin="0,6,0,0"
+                           Foreground="#2E7D32"
+                           Visibility="{Binding IsError, Converter={StaticResource InverseBoolToVisibility}}" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>
